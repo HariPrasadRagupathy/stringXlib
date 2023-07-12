@@ -8,24 +8,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - run: echo "The ${{ github.repository }} repository has been cloned."
-      - run: echo "Setting up JDK"
-
-      - name: set up JDK
-        uses: actions/setup-java@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
 
-      - run: echo "The workflow is now ready to test your code."
+      - name: Set up Android SDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'android'
 
-
-      - run: echo "Building Debug APK."
-
-      - run: chmod +x ./gradlew
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
-      - run: echo "Build status report=${{ job.status }}."
+        run: ./gradlew assembleDebug
+
+      - name: Archive APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/apk/debug/app-debug.apk
 
