@@ -22,9 +22,11 @@ jobs:
 
       - run: echo "The workflow is now ready to test your code."
 
-      - name: Run Tests
-        run: ./gradlew test
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Build Project
-        run: ./gradlew assemble
+      - run: echo "Building Debug APK."
+      - name: Build with Gradle
+        run: ./gradlew build
+      - run: echo "Build status report=${{ job.status }}."
 
