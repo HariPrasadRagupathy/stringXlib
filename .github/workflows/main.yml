@@ -24,6 +24,9 @@ jobs:
 
 
       - run: echo "Building Debug APK."
+
+      - run: chmod +x gradlew
+
       - name: Build with Gradle
         run: ./gradlew build
       - run: echo "Build status report=${{ job.status }}."
