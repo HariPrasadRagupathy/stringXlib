@@ -33,3 +33,12 @@ jobs:
         run: ./gradlew build
       - run: echo "Build status report=${{ job.status }}."
 
+      - name: Build with Gradle Assemble
+        run: ./gradlew assembleDebug
+
+      - name: Archive APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/apk/debug/app-debug.apk
+
