@@ -8,31 +8,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Set up JDK
+      - run: echo "The ${{ github.repository }} repository has been cloned."
+      - run: echo "Setting up JDK"
+
+      - name: Setup JDK
         uses: actions/setup-java@v2
         with:
+          distribution: 'zulu'
           java-version: '11'
-          java-package: jdk
-          distribution: 'adopt'
 
-      - name: Set up Android SDK
-        uses: actions/setup-java@v2
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - run: echo "The workflow is now ready to test your code."
+
+      - name: Setup Gradle Cache
+        uses: actions/cache@v2
         with:
-          java-version: '11'
-          distribution: 'android'
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
 
-      - name: Make Gradle wrapper executable
-        run: chmod +x gradlew
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - run: echo "Building Debug APK."
+
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
-
-      - name: Archive APK
-        uses: actions/upload-artifact@v2
-        with:
-          name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+        run: ./gradlew build
+      - run: echo "Build status report=${{ job.status }}."
 
