@@ -8,38 +8,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: List files in workspace
-        run: ls -R
+      - uses: actions/checkout@v3
 
       - run: echo "The ${{ github.repository }} repository has been cloned."
       - run: echo "Setting up JDK"
 
-      - name: Setup JDK
-        uses: actions/setup-java@v2
+      - name: set up JDK
+        uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
           java-version: '11'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+          distribution: 'temurin'
+          cache: gradle
 
       - run: echo "The workflow is now ready to test your code."
 
-      - name: Setup Gradle Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
 
       - run: echo "Building Debug APK."
 
+      - name: Make Gradle wrapper executable
+        run: |
+          cd app
+          chmod +x gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
