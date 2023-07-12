@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: List files in workspace
+        run: ls -R
+
       - run: echo "The ${{ github.repository }} repository has been cloned."
       - run: echo "Setting up JDK"
 
