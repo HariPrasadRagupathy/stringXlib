@@ -60,7 +60,7 @@ afterEvaluate {
 
                 groupId 'com.hp.libs'
                 artifactId = 'stringXlib'
-                version '0.0.5'
+                version '0.0.6'
             }
         }
     }
